@@ -3,7 +3,7 @@
     "username": "iot",
     "password": "iot",
     "database": "iot",
-    "host": "172.18.0.3",
+    "host": "172.18.0.4",
     "port": "5432",
     "dialect": "postgres"
   },
@@ -11,7 +11,7 @@
     "username": "iot",
     "password": "iot",
     "database": "iot_test",
-    "host": "172.18.0.3",
+    "host": "172.18.0.4",
     "port": "5432",
     "dialect": "postgres"
   }
