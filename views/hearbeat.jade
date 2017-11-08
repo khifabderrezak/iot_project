@@ -1,0 +1,29 @@
+style(type='text/css').
+
+	#svg-wrapper {
+		width: 700px;
+		height: 300px;
+		margin: 1em;
+	}
+
+	svg path {
+		fill: none;
+		stroke: #ff1824;
+		stroke-width: 2px;
+	}
+
+	svg .axis {
+		font-size: 12px;
+	}
+
+	svg .axis path {
+		display: none;
+	}
+
+
+script(src="https://d3js.org/d3.v3.min.js")
+script(src="/socket.io/socket.io.js")
+script(src="/static/javascripts/heart_monitor.js")
+
+#svg-wrapper
+	include ../public/html-animation/heartbeat.html

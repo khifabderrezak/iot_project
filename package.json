@@ -1,5 +1,5 @@
 {
-  "name": "iot-health-project",
+  "name": "iot_project",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -12,6 +12,11 @@
     "express": "~4.15.2",
     "jade": "~1.11.0",
     "morgan": "~1.8.1",
-    "serve-favicon": "~2.4.2"
+    "serialport": "^6.0.4",
+    "serve-favicon": "~2.4.2",
+    "socket.io": "^2.0.4",
+    "socket.io-serialport": "^2.0.1",
+    "socket.io-stream": "^0.9.1",
+    "then-jade": "^2.4.3"
   }
 }

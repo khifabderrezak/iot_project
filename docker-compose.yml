@@ -1,0 +1,23 @@
+version: '2'
+services:
+  db:
+   container_name: pg
+   image: postgres:latest
+   environment:
+    POSTGRES_USER: iot
+    POSTGRES_PASSWORD: iot
+  nodejs:
+   container_name: node_con2
+   build:
+     context: .
+     dockerfile: ./Dockerfile
+   devices:
+    - /dev/ttyACM0:/dev/ttyACM0
+   volumes:
+    - /home/rezak/iot_project/:/host
+  pgadmin:
+   container_name: pgadmin
+   image: fenglc/pgadmin4:latest
+   ports:
+    - 5050:5050
+

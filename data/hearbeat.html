@@ -1,0 +1,47 @@
+
+
+ 
+.heardiv{
+	text-align: center; 
+}
+	.heart {
+	font-size: 150px;
+	color: #e74c3c;
+	animation: beat .25s infinite alternate;
+	transform-origin: center;
+}
+	@-webkit-keyframes heartbeat {
+	    0% { -webkit-transform: scale(1); }
+	    20% { -webkit-transform: scale(0.8); }
+	    30% { -webkit-transform: scale(1); }
+	    40% { -webkit-transform: scale(0.8); }
+	    50% { -webkit-transform: scale(1); }
+	    100% { -webkit-transform: scale(1); }
+	}
+	@-moz-keyframes heartbeat {
+	    0% { -moz-transform: scale(1); }
+	    20% { -moz-transform: scale(0.8); }
+	    30% { -moz-transform: scale(1); }
+	    40% { -moz-transform: scale(0.8); }
+	    50% { -moz-transform: scale(1); }
+	    100% { -moz-transform: scale(1); }
+	}
+	.heart,
+	.heart:focus {
+	    -webkit-animation-name: heartbeat;
+	    -webkit-animation-duration: 1s;
+	    -webkit-transform-origin:50% 50%;
+	    -webkit-animation-iteration-count: infinite;
+	    -webkit-animation-timing-function: linear;
+	     
+	    -moz-animation-name: heartbeat;
+	    -moz-animation-duration: 1s;
+	    -moz-transform-origin:50% 50%;
+	    -moz-animation-iteration-count: infinite;
+	    -moz-animation-timing-function: linear;
+	}
+	link(rel='stylesheet', href='/stylesheets/heart.css')
+    .heardiv
+		.heart
+			| &#x2665;
+		

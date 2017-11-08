@@ -4,12 +4,24 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
+var serialport = require('serialport');
 var index = require('./routes/index');
 var users = require('./routes/users');
 
+//ceci est comment
 var app = express();
-
+var mailer = require('express-mailer');
+mailer.extend(app, {
+    from: 'abderrezak.khif@gmail.com',
+    host: 'smtp.gmail.com', // hostname
+    secureConnection: true, // use SSL
+    port: 465, // port for secure SMTP
+    transportMethod: 'SMTP', // default is SMTP. Accepts anything that nodemailer accepts
+    auth: {
+        user: 'abderrezak.khif@gmail.com',
+        pass: 'mamanmars'
+    }
+});
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -20,7 +32,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use("/static",express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);

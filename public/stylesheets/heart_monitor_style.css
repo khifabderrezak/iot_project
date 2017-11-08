@@ -1,0 +1,20 @@
+#svg-wrapper {
+	width: auto;
+	height: 200px;
+	margin: 2em auto;
+}
+
+svg path {
+	fill: none;
+	stroke: #000;
+	stroke-width: 1.5px;
+}
+
+svg .axis {
+	font-size: 12px;
+}
+
+svg .axis path {
+	display: none;
+
+}

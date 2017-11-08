@@ -1,5 +1,11 @@
 extends layout
 
 block content
+  h1= user
   h1= title
-  p Welcome to #{title}
+  p #{user} Welcome
+  block sidebar
+  .widget
+  <h1>ceci est un test</h1>
+  p ceci est un test
+<a href="/">Home</a>

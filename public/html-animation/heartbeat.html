@@ -1,0 +1,59 @@
+<style>
+  .values_heart{
+    display: inline;
+    position: absolute;
+  }
+  .heart {
+    font-size: 20px;
+    color: #e00;
+      position: absolute;
+    display: inline;
+      margin: 10px;
+    -webkit-animation: beat 1s infinite alternate;
+    -moz-animation: beat .25s infinite alternate;
+    -ms-animation: beat 1s infinite alternate;
+    -o-animation: beat 1s infinite alternate;
+    animation: beat 1s infinite alternate;
+
+    -webkit-transform-origin: center;
+    -moz-transform-origin: center;
+    -o-transform-origin: center;
+    -ms-transform-origin: center;
+    transform-origin: center;
+  }
+  @keyframes beat
+  {
+    0%
+    {
+      transform: scale( .75 );
+    }
+    20%
+    {
+      transform: scale( 1 );
+    }
+    40%
+    {
+      transform: scale( .75 );
+    }
+    60%
+    {
+      transform: scale( 1 );
+    }
+    80%
+    {
+      transform: scale( .75 );
+    }
+    100%
+    {
+      transform: scale( .75 );
+    }
+  }
+  } 
+</style>
+<div heart style="float: left">
+<span class="heart">&#x2665;</span>
+<span class="values_heart"></spane>
+</div>
+
+
+      
