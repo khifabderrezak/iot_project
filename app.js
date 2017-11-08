@@ -12,14 +12,14 @@ var users = require('./routes/users');
 var app = express();
 var mailer = require('express-mailer');
 mailer.extend(app, {
-    from: 'abderrezak.khif@gmail.com',
+    from: 'iotwocs@gmail.com',
     host: 'smtp.gmail.com', // hostname
     secureConnection: true, // use SSL
     port: 465, // port for secure SMTP
     transportMethod: 'SMTP', // default is SMTP. Accepts anything that nodemailer accepts
     auth: {
-        user: '',
-        pass: ''
+        user: 'iotwocs@gmail.com'',
+        pass: 'Iwocs17@'
     }
 });
 // view engine setup
