@@ -3,14 +3,11 @@ var db = require('../models/index');
 module.exports = function(sequelize, DataTypes) {
   var heartBeat = sequelize.define('heartBeat', {
     value: DataTypes.DOUBLE,
-    date: DataTypes.TIME
+    date: DataTypes.DATEONLY,
+    time: DataTypes.TIME
   }, {
-    classMethods: {
-      associate: function(models) {
-        // associations can be defined here
-      }
-    }
-  });
+    timestamps: false
+});
  /*removing association between HeartBeat & Profil
   heartBeat.associate = function(models){
     heartBeat.belongsTo(models.Profil, {

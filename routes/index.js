@@ -1,8 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var http = require('http');
+var db = require('../server/models/index');
 
-var ancienTemp = 0;
+var lastTemp = 0;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -77,6 +78,14 @@ router.get('/arduino', function (req,res,next) {
     io.on('connection', function (socket) {
             heart_beat_values.on('data', function (inp) {
             socket.emit('heart', {message: inp.toString("utf-8")});
+            const heart_beat =  db["heartBeat"].build({
+                value : parseFloat(inp.toString("utf-8")),
+                date: Date.now(),
+                time: new Date()
+            });
+            heart_beat.save().then(() =>{
+                console.log("----------------------- Persist heart beat");
+            })
         });
     });
 
@@ -84,6 +93,17 @@ router.get('/arduino', function (req,res,next) {
     io.on('connection', function (socket) {
         temperature_values.on('data', function (inp) {
             socket.emit('temperature', {message: inp.toString("utf-8")});
+            if(parseFloat(inp.toString("utf-8")) != lastTemp){
+                lastTemp = parseFloat(inp.toString("utf-8"));
+                const Temps =  db["Temps"].build({
+                    value : parseFloat(inp.toString("utf-8")),
+                    date: Date.now(),
+                    time: new Date()
+                });
+                Temps.save().then(() =>{
+                    console.log("----------------------- Persist Temp");
+                })
+            }
         });
     });
 

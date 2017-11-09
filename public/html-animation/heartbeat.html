@@ -53,11 +53,38 @@
       transform: scale( .75 );
     }
   }
-  } 
 </style>
+<script>
+  var socket = io.connect('/');
+  //socket for heart beat
+  socket.on('heart', function(data) {
+      //console.log(data.message);
+      $('#heart').html(data.message);
+      var rythme_heart = 60/parseFloat(data.message);
+      //alert(rythme_heart);
+      $(".heart").css("-moz-animation-duration",rythme_heart+"s"); 
+      $(".heart").css("-webkit-animation-duration",rythme_heart+"s");
+  });
+
+  //socket for temperature
+  socket.on('temperature', function(data) {
+      //console.log(data.message);
+      $('.temp').html(data.message+" °C");
+  });
+</script>
+
 <div heart style="float: left">
-<div class="values_heart"><p><span class="heart">&#x2665;</span> 235 </p></div>
-<span class="temp">35 °C</span>
+
+<div class="values_heart">
+  <!-- heart beat value -->
+  <p><span class="heart">&#x2665;</span> 
+    <span id="heart"> </span>
+  </p>
+
+</div>
+  <!-- temperature value -->
+  <span class="temp"> </span>
+
 </div>
 
 

@@ -37,6 +37,7 @@ window.onload = function monitor() {
         var now = new Date();
         var nowTime = now.getTime();
         if (BEAT_VALUES.length > 1){
+            //beep0.end();
             beep1.play();
             //alert("1     "+BEAT_VALUES.length);
         }else{

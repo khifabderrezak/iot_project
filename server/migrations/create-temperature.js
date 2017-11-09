@@ -12,8 +12,12 @@ module.exports = {
           allowNull: false
         },
         date: {
-            type: Sequelize.TIME,
+            type: Sequelize.DATEONLY,
             allowNull: false
+        },
+        time: {
+          type: Sequelize.TIME,
+          allowNull: false
         },
         /*removing Foreign key
         profilId: {

@@ -3,14 +3,11 @@ var db = require('../models/index');
 module.exports = function(sequelize, DataTypes) {
   var Temps = sequelize.define('Temps', {
     value: DataTypes.DOUBLE,
-    date: DataTypes.TIME
+    date: DataTypes.DATEONLY,
+    time: DataTypes.TIME
   }, {
-    classMethods: {
-      associate: function(models) {
-        // associations can be defined here
-      }
-    }
-  });
+    timestamps: false
+});
 
   /* removing association between Temperature & Profil
   Temps.associate = function(models){
