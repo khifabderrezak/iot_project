@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 var http = require('http');
 
+var ancienTemp = 0;
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('home', { title: 'Express' });
@@ -52,11 +54,20 @@ router.get('/arduino', function (req,res,next) {
     var pars = sp.pipe(new Delimiter({ delimiter: '\n'}));
     pars.on('data',function(input) {
         var values = input.toString("utf-8").slice(0, -1).split(":");
-        console.log("hdhdhhd");
-        console.log(values[0]+"             "+values[1]);
-        heart_beat_values.push(values[0]);
-        temperature_values.push(values[1]);
-            });
+        console.log(values[0]);
+        console.log(values[1]);
+        /*var newHeartBeat = new heartBeat();
+        newHeartBeat.value = values[0];
+        newHeartBeat.date = new Date();
+        newHeartBeat.profilId = 1;
+        newHeartBeat.save().then(() => {
+            //########
+            alert("asd");
+        });*/
+
+    heart_beat_values.push(values[0]);
+    temperature_values.push(values[1]);
+    });
 
 
     heart_beat_values._read = function noop() {};

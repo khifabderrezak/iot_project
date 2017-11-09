@@ -1,13 +1,18 @@
 <style>
   .values_heart{
-    display: inline;
-    position: absolute;
+    display: inline-block;
+    color: #2c3e50;
+    margin:10px;
+  }
+  .temp{
+    display: inline-block;
+    color: #2c3e50;
+    margin: 10px 10px 10px 20px;
   }
   .heart {
     font-size: 20px;
-    color: #e00;
-      position: absolute;
-    display: inline;
+    color: #2c3e50;
+    display: inline-block;
       margin: 10px;
     -webkit-animation: beat 1s infinite alternate;
     -moz-animation: beat .25s infinite alternate;
@@ -51,8 +56,8 @@
   } 
 </style>
 <div heart style="float: left">
-<span class="heart">&#x2665;</span>
-<span class="values_heart"></spane>
+<div class="values_heart"><p><span class="heart">&#x2665;</span> 235 </p></div>
+<span class="temp">35 °C</span>
 </div>
 
 

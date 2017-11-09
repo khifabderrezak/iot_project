@@ -1,13 +1,13 @@
 FROM node:latest
 RUN apt-get update
 RUN apt-get install -y nodejs nodejs-legacy npm
-RUN npm install -g express-generator
-RUN npm install jade-bootstrap
-RUN npm install request
-RUN npm install express-mailer
-RUN npm install johnny-five
+#RUN npm install -g express-generator
+#RUN npm install jade-bootstrap
+#RUN npm install request
+#RUN npm install express-mailer
+#RUN npm install johnny-five
 
-VOLUME /home/pro/Documents/iot_project
+VOLUME /home/rezak/iot_project
 EXPOSE 49160
 CMD /bin/bash
 

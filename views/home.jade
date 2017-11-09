@@ -14,22 +14,21 @@ html( lang="en" )
             //- Navbar with dropdowns, default color
             include nav_bar.jade
             .page-header
-                h2 ici le graph temps réel des batement de coeur et del temperature
             .row
-                .col-xs-12
-                    .panel.panel-success
-                        .panel-heading: Temperature: #temp
-                        .panel-body
-                            include hearbeat.jade
+                .col-xs-8.col-xs-12
+                    <canvas id="myChart"></canvas>
+                .col-xs-4.col-xs-12
+                    include hearbeat.jade
+                .col-xs-8.col-xs-12
+                    .col-xs-3.col-xs-12
+                        p: a.btn.btn-primary.btn-lg Précédent
+                    .col-xs-3.col-xs-12
+                        p: a.btn.btn-primary.btn-lg Suivant
 
-            //- Jumbotron
-            .page-header: h1 Historique en Graphe
 
-            .jumbotron
-                h1 Hello, world!
-                p This is a simple hero unit, a simple jumbotron-style
-                    component for calling extra attention to featured content or information.
-                p: a.btn.btn-primary.btn-lg Learn more
+            
+
+            
 
             .page-header
                 h1 footer
@@ -43,4 +42,6 @@ html( lang="en" )
 
         //script( src='//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js' )
         script(src='http://code.jquery.com/jquery.js')
-script( src='//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js' )
+        script( src='//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js' )
+        script( src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js' )
+        script( src='/static/javascripts/graphique.js')

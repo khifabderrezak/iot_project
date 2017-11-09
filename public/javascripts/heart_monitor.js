@@ -6,12 +6,14 @@ window.onload = function monitor() {
     var insideBeat = false;
     var data = [];
     var SECONDS_SAMPLE = 5;
-    var BEAT_TIME = 400;
+    var BEAT_TIME = 500;
     var TICK_FREQUENCY = SECONDS_SAMPLE * 1000 / BEAT_TIME;
     var BEAT_VALUES = [];
     var socket = io.connect('/');
-    var beep = document.createElement('audio');
-    beep.src = 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/35984/heart_beep.mp3';
+    var beep0 = document.createElement('audio');
+    beep0.src = '/static/ecg/0.mp3';
+    var beep1 = document.createElement('audio');
+    beep1.src = '/static/ecg/1.mp3';
 
     socket.on('heart', function(data) {
         console.log(data.message);
@@ -34,7 +36,13 @@ window.onload = function monitor() {
 
         var now = new Date();
         var nowTime = now.getTime();
-
+        if (BEAT_VALUES.length > 1){
+            beep1.play();
+            //alert("1     "+BEAT_VALUES.length);
+        }else{
+           beep0.play(); 
+           //alert("0      "+BEAT_VALUES.length);
+        } 
         if (data.length > 0 && data[data.length - 1].date > now) {
             data.splice(data.length - 1, 1);
         }
@@ -44,7 +52,8 @@ window.onload = function monitor() {
             value: 0
         });
         var step = BEAT_TIME / BEAT_VALUES.length - 2;
-        beep.play();
+
+        
         for (var i = 1; i < BEAT_VALUES.length; i++) {
             data.push({
                 date: new Date(nowTime + i * step),

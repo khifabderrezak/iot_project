@@ -14,7 +14,7 @@ services:
    devices:
     - /dev/ttyACM0:/dev/ttyACM0
    volumes:
-    - /home/pro/Documents/iot_project:/host
+    - /home/rezak/iot_project:/host
   pgadmin:
    container_name: pgadmin
    image: fenglc/pgadmin4:latest
