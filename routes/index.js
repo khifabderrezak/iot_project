@@ -1,3 +1,4 @@
+var app = require('../app.js');
 var express = require('express');
 var Sequelize = require('sequelize');
 var router = express.Router();
@@ -5,9 +6,13 @@ var http = require('http');
 var db = require('../server/models/index');
 var utils = require('./utils')
 var lastTemp = 0;
-var r1;
-var r2;
+var tabTemp = [];
+var tabHeart = [];
 
+var cookie = require('cookie-parser');
+//var cookie = require('cookie');
+
+//app.use(cookie());
 
 var sequelize = new Sequelize('iot', 'iot', 'iot', {
     host: '172.18.0.2',
@@ -30,6 +35,7 @@ var sequelize = new Sequelize('iot', 'iot', 'iot', {
 
 
 /* GET home page. */
+/*
 router.get('/', function(req, res, next) {
   res.render('home', { title: 'Express' });
 });
@@ -56,12 +62,12 @@ router.get('/email/:msg', function (req,res,next) {
         }
     );
 
-    //res.render('index', {title : msg});
+    
 
-});
+});*/
 
 
-router.get('/arduino', function (req,res,next) {
+router.get('/', function (req,res,next) {
     var SerialPort = require('serialport');
     var Readline = SerialPort.parsers.readline;
     var Readable = require('stream').Readable;
@@ -129,16 +135,19 @@ router.get('/arduino', function (req,res,next) {
 
     var pDate = new Date();  
     pDate.setDate(pDate.getDate());
-
+ 
     averageHeartBeatByhour(pDate);
     averageTempByhour(pDate);
+
+    var cookie = req.cookies.cHeart;
+    console.log("cookie "+cookie);
     
-    res.render('home', {title : 'arduino page'});
+    res.render('home', {title : 'arduino page', varHeart : tabHeart,
+         varTemp: tabTemp.join(','), varDate : pDate});
 });
 
 //average heart beat by hour
 function averageHeartBeatByhour(day){
-        var tab = [];
         var countElem = 0;
         var sumElem = 0;
         db["heartBeat"].findAndCountAll({
@@ -162,23 +171,30 @@ function averageHeartBeatByhour(day){
                         sumElem += elem.value;
                    }
                });
-               tab[i] = sumElem / countElem;
+               if((countElem) === 0)
+                tabHeart.push(0); 
+                 
+               else tabHeart.push(sumElem / countElem);
+                    
+               //console.log("tab -" + tabHeart);
                countElem = 0;
                sumElem = 0;
-            }
 
-            for(var i = 0; i < tab.length; i++){
-                console.log("--> hour : "+i +" --> "+tab[i]);
+               
             }
+            callback(null,tabHeart);
+            console.log("-->"+tabHeart);
+            
               });
         });
+        
 }
 
 //average temperature by hour
 function averageTempByhour(day){
-    var tab = [];
     var countElem = 0;
     var sumElem = 0;
+    
     db["Temps"].findAndCountAll({
         where: {
             date: day
@@ -200,16 +216,18 @@ function averageTempByhour(day){
                     sumElem += elem.value;
                }
            });
-           tab[i] = sumElem / countElem;
+           if((countElem) === 0)
+            tabTemp.push(0);
+           else tabTemp.push(sumElem / countElem);
+
            countElem = 0;
            sumElem = 0;
         }
 
-        for(var i = 0; i < tab.length; i++){
-            console.log("--> Temp hour : "+i +" --> "+tab[i]);
-        }
+       
           });
     });
+   
 }
 
 module.exports = router;

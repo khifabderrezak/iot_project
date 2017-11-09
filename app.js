@@ -2,14 +2,20 @@ var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
-var cookieParser = require('cookie-parser');
+
 var bodyParser = require('body-parser');
 var serialport = require('serialport');
 var index = require('./routes/index');
 var users = require('./routes/users');
 
+var cookieParser = require('cookie-parser');
+var cookie = require('cookie');
+
+
 //ceci est comment
 var app = express();
+app.use(cookieParser());
+
 var mailer = require('express-mailer');
 mailer.extend(app, {
     from: 'iotwocs@gmail.com',
