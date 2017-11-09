@@ -24,7 +24,7 @@ module.exports = {
             type: Sequelize.STRING,
             allowNull: false,
           },
-          contact: {
+        contact: {
             type: Sequelize.STRING,
             allowNull: false,
           },

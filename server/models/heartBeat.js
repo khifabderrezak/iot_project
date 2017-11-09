@@ -11,7 +11,7 @@ module.exports = function(sequelize, DataTypes) {
       }
     }
   });
-
+ /*removing association between HeartBeat & Profil
   heartBeat.associate = function(models){
     heartBeat.belongsTo(models.Profil, {
       onDelete: "CASCADE",
@@ -19,12 +19,7 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: false
       }
     });
-  }
+  }*/
 
   return heartBeat;
 };
-
-
-
-//db["Users"].BelongsTo(db["Temps"], {foreignKey : "userId"});
-//db["Temps"].HasOne(db["Users"], {foreignKey : "userId"});

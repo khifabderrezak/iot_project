@@ -12,6 +12,7 @@ module.exports = function(sequelize, DataTypes) {
     }
   });
 
+  /* removing association between Temperature & Profil
   Temps.associate = function(models){
     Temps.belongsTo(models.Profil, {
       onDelete: "CASCADE",
@@ -20,11 +21,6 @@ module.exports = function(sequelize, DataTypes) {
       }
     });
   }
-
+*/
   return Temps;
 };
-
-
-
-//db["Users"].BelongsTo(db["Temps"], {foreignKey : "userId"});
-//db["Temps"].HasOne(db["Users"], {foreignKey : "userId"});
