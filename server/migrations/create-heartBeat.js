@@ -19,17 +19,10 @@ module.exports = {
           type: Sequelize.TIME,
           allowNull: false
         },
-        /*removing Foreign key
-        profilId: {
+        hour: {
           type: Sequelize.INTEGER,
-          onDelete: "CASCADE",
-          allowNull: false,
-          references: {
-            model: 'Profil',
-            key: 'id'
-          }
-        }
-        */
+          allowNull: false
+        },
       }),
     down: (queryInterface /* , Sequelize */) => queryInterface.dropTable('heartBeats'),
   };

@@ -1,9 +1,33 @@
 var express = require('express');
+var Sequelize = require('sequelize');
 var router = express.Router();
 var http = require('http');
 var db = require('../server/models/index');
-
+var utils = require('./utils')
 var lastTemp = 0;
+var r1;
+var r2;
+
+
+var sequelize = new Sequelize('iot', 'iot', 'iot', {
+    host: '172.18.0.2',
+    port: '5432',
+    dialect: 'postgres',
+  
+    pool: {
+      max: 5,
+      min: 0,
+      acquire: 30000,
+      idle: 10000
+    },
+  
+    // SQLite only
+    storage: 'path/to/database.sqlite',
+  
+    // http://docs.sequelizejs.com/manual/tutorial/querying.html#operators
+    operatorsAliases: false
+  });
+
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -57,14 +81,6 @@ router.get('/arduino', function (req,res,next) {
         var values = input.toString("utf-8").slice(0, -1).split(":");
         console.log(values[0]);
         console.log(values[1]);
-        /*var newHeartBeat = new heartBeat();
-        newHeartBeat.value = values[0];
-        newHeartBeat.date = new Date();
-        newHeartBeat.profilId = 1;
-        newHeartBeat.save().then(() => {
-            //########
-            alert("asd");
-        });*/
 
     heart_beat_values.push(values[0]);
     temperature_values.push(values[1]);
@@ -81,14 +97,17 @@ router.get('/arduino', function (req,res,next) {
             const heart_beat =  db["heartBeat"].build({
                 value : parseFloat(inp.toString("utf-8")),
                 date: Date.now(),
-                time: new Date()
+                time: new Date(),
+                hour: new Date().getHours() - 1
             });
             heart_beat.save().then(() =>{
                 console.log("----------------------- Persist heart beat");
             })
         });
+        //moyenne();
     });
 
+    
 
     io.on('connection', function (socket) {
         temperature_values.on('data', function (inp) {
@@ -98,7 +117,8 @@ router.get('/arduino', function (req,res,next) {
                 const Temps =  db["Temps"].build({
                     value : parseFloat(inp.toString("utf-8")),
                     date: Date.now(),
-                    time: new Date()
+                    time: new Date(),
+                    hour: new Date().getHours() - 1
                 });
                 Temps.save().then(() =>{
                     console.log("----------------------- Persist Temp");
@@ -107,10 +127,89 @@ router.get('/arduino', function (req,res,next) {
         });
     });
 
+    var pDate = new Date();  
+    pDate.setDate(pDate.getDate());
+
+    averageHeartBeatByhour(pDate);
+    averageTempByhour(pDate);
+    
     res.render('home', {title : 'arduino page'});
 });
 
+//average heart beat by hour
+function averageHeartBeatByhour(day){
+        var tab = [];
+        var countElem = 0;
+        var sumElem = 0;
+        db["heartBeat"].findAndCountAll({
+            where: {
+                date: day
+            },
+            order: [
+                'hour'
+            ]
+        }).then(data => {
+            db["heartBeat"].sum('value', {
+                where: {
+                    date: day
+                }
+            }).then(sum => {
+                console.log("+++++" + sum / data.count);
+            for(var i = 0; i < 24; i++){
+               data.rows.forEach((elem) => {
+                   if(i == elem.hour){
+                        countElem += 1;
+                        sumElem += elem.value;
+                   }
+               });
+               tab[i] = sumElem / countElem;
+               countElem = 0;
+               sumElem = 0;
+            }
 
+            for(var i = 0; i < tab.length; i++){
+                console.log("--> hour : "+i +" --> "+tab[i]);
+            }
+              });
+        });
+}
 
+//average temperature by hour
+function averageTempByhour(day){
+    var tab = [];
+    var countElem = 0;
+    var sumElem = 0;
+    db["Temps"].findAndCountAll({
+        where: {
+            date: day
+        },
+        order: [
+            'hour'
+        ]
+    }).then(data => {
+        db["Temps"].sum('value', {
+            where: {
+                date: day
+            }
+        }).then(sum => {
+            console.log("T+++++" + sum / data.count);
+        for(var i = 0; i < 24; i++){
+           data.rows.forEach((elem) => {
+               if(i == elem.hour){
+                    countElem += 1;
+                    sumElem += elem.value;
+               }
+           });
+           tab[i] = sumElem / countElem;
+           countElem = 0;
+           sumElem = 0;
+        }
+
+        for(var i = 0; i < tab.length; i++){
+            console.log("--> Temp hour : "+i +" --> "+tab[i]);
+        }
+          });
+    });
+}
 
 module.exports = router;

@@ -4,7 +4,8 @@ module.exports = function(sequelize, DataTypes) {
   var heartBeat = sequelize.define('heartBeat', {
     value: DataTypes.DOUBLE,
     date: DataTypes.DATEONLY,
-    time: DataTypes.TIME
+    time: DataTypes.TIME,
+    hour: DataTypes.INTEGER
   }, {
     timestamps: false
 });

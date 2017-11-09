@@ -4,20 +4,12 @@ module.exports = function(sequelize, DataTypes) {
   var Temps = sequelize.define('Temps', {
     value: DataTypes.DOUBLE,
     date: DataTypes.DATEONLY,
-    time: DataTypes.TIME
+    time: DataTypes.TIME,
+    hour: DataTypes.INTEGER,
+    ProfilId: DataTypes.INTEGER
   }, {
     timestamps: false
 });
 
-  /* removing association between Temperature & Profil
-  Temps.associate = function(models){
-    Temps.belongsTo(models.Profil, {
-      onDelete: "CASCADE",
-      foreignKey: {
-        allowNull: false
-      }
-    });
-  }
-*/
   return Temps;
 };
