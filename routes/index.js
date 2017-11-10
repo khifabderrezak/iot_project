@@ -15,7 +15,7 @@ var cookie = require('cookie-parser');
 //app.use(cookie());
 
 var sequelize = new Sequelize('iot', 'iot', 'iot', {
-    host: '172.18.0.2',
+    host: '172.17.0.2',
     port: '5432',
     dialect: 'postgres',
   
@@ -95,7 +95,17 @@ router.get('/', function (req,res,next) {
 
     heart_beat_values._read = function noop() {};
     temperature_values._read = function noop() {};
-
+    var pDate = new Date();  
+    pDate.setDate(pDate.getDate());
+ 
+   averageHeartBeatByhour(pDate,function(tab){
+       tabHeart = tab;
+       console.log("-->"+tabHeart.join(','));
+    });
+    averageTempByhour(pDate,function(tab){
+       tabTemp = tab;
+       console.log("temperature"+tabTemp);
+    });
 
     io.on('connection', function (socket) {
             heart_beat_values.on('data', function (inp) {
@@ -104,7 +114,7 @@ router.get('/', function (req,res,next) {
                 value : parseFloat(inp.toString("utf-8")),
                 date: Date.now(),
                 time: new Date(),
-                hour: new Date().getHours() - 1
+                hour: new Date().getHours()+2
             });
             heart_beat.save().then(() =>{
                 console.log("----------------------- Persist heart beat");
@@ -114,7 +124,7 @@ router.get('/', function (req,res,next) {
     });
 
     
-
+    
     io.on('connection', function (socket) {
         temperature_values.on('data', function (inp) {
             socket.emit('temperature', {message: inp.toString("utf-8")});
@@ -124,7 +134,7 @@ router.get('/', function (req,res,next) {
                     value : parseFloat(inp.toString("utf-8")),
                     date: Date.now(),
                     time: new Date(),
-                    hour: new Date().getHours() - 1
+                    hour: new Date().getHours()+2
                 });
                 Temps.save().then(() =>{
                     console.log("----------------------- Persist Temp");
@@ -133,22 +143,16 @@ router.get('/', function (req,res,next) {
         });
     });
 
-    var pDate = new Date();  
-    pDate.setDate(pDate.getDate());
- 
-    averageHeartBeatByhour(pDate);
-    averageTempByhour(pDate);
 
-    var cookie = req.cookies.cHeart;
-    console.log("cookie "+cookie);
     
-    res.render('home', {title : 'arduino page', varHeart : tabHeart,
+    res.render('home', {title : 'arduino page', varHeart : tabHeart.join(','),
          varTemp: tabTemp.join(','), varDate : pDate});
 });
 
 //average heart beat by hour
-function averageHeartBeatByhour(day){
+function averageHeartBeatByhour(day,callback){
         var countElem = 0;
+         var insidetabHeart = [];
         var sumElem = 0;
         db["heartBeat"].findAndCountAll({
             where: {
@@ -172,9 +176,8 @@ function averageHeartBeatByhour(day){
                    }
                });
                if((countElem) === 0)
-                tabHeart.push(0); 
-                 
-               else tabHeart.push(sumElem / countElem);
+                insidetabHeart.push(0);  
+               else insidetabHeart.push(sumElem / countElem);
                     
                //console.log("tab -" + tabHeart);
                countElem = 0;
@@ -182,19 +185,17 @@ function averageHeartBeatByhour(day){
 
                
             }
-            callback(null,tabHeart);
-            console.log("-->"+tabHeart);
-            
+            callback(insidetabHeart);
               });
         });
-        
+      
 }
 
 //average temperature by hour
-function averageTempByhour(day){
+function averageTempByhour(day,callback){
     var countElem = 0;
     var sumElem = 0;
-    
+    var insidetabTemp = [];
     db["Temps"].findAndCountAll({
         where: {
             date: day
@@ -217,17 +218,19 @@ function averageTempByhour(day){
                }
            });
            if((countElem) === 0)
-            tabTemp.push(0);
-           else tabTemp.push(sumElem / countElem);
+            insidetabTemp.push(0);
+           else insidetabTemp.push(sumElem / countElem);
 
            countElem = 0;
            sumElem = 0;
         }
 
-       
+         //console.log("-->"+tabTemp);
+          callback(insidetabTemp);
           });
     });
    
 }
+
 
 module.exports = router;

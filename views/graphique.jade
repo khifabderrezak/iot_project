@@ -3,9 +3,8 @@
 
 script(type='text/javascript').
     var ctx = document.getElementById('myChart').getContext('2d');
-    var varHeart = document.cookie;
-
-    console.log("-->"+varHeart);
+    var varHeart = !{JSON.stringify(varHeart)}.split(",");
+    var varTemp = !{JSON.stringify(varTemp)}.split(",");
     var chart = new Chart(ctx, {
         // The type of chart we want to create
         type: 'line',
@@ -16,11 +15,11 @@ script(type='text/javascript').
             datasets: [{
                 label: "Heart bpm",
                 borderColor: '#2c3e50',
-                data: !{JSON.stringify(varHeart)}
+                data: varHeart
             },{
                 label: "Temperature",
                 borderColor: 'rgb(0, 230, 0)',
-                data: !{JSON.stringify(varTemp)}
+                data: varTemp
             } 
             ]
         },
@@ -28,7 +27,7 @@ script(type='text/javascript').
         options: {
             title:{
                 display:true,
-                text: !{JSON.stringify(varDate)}, 
+                text: !{JSON.stringify(varDate)}.slice(0,10), 
                 fontSize:25
             }
         }
