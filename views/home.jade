@@ -20,10 +20,11 @@ html( lang="en" )
                 .col-xs-4.col-xs-12
                     include hearbeat.jade
                 .col-xs-8.col-xs-12
-                    .col-xs-3.col-xs-12
-                        p: a.btn.btn-primary.btn-lg Précédent
-                    .col-xs-3.col-xs-12
-                        p: a.btn.btn-primary.btn-lg Suivant
+                    form(name="mouv" method='GET' action='/')
+                        .col-xs-3.col-xs-12
+                            button(type="submit",name="prec",value="prec") Précédent
+                        .col-xs-3.col-xs-12
+                            button(type="submit",name="suiv",value="suiv") Suivant
 
 
             

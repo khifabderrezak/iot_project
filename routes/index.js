@@ -65,9 +65,52 @@ router.get('/email/:msg', function (req,res,next) {
     
 
 });*/
-
+router.get('/about', function(req, res, next) {
+  res.render('about', { title: 'about' });
+});
 
 router.get('/', function (req,res,next) {
+    var cookie = req.cookies.date;
+    if (cookie === undefined)
+    {
+    // no: set a new cookie
+        var pDate = new Date();
+        pDate.setDate(pDate.getDate());
+        var DateCookie = pDate.toISOString().slice(0,10);
+        res.cookie('date',DateCookie, { maxAge: 900000, httpOnly: true });
+        console.log('cookie created successfully');
+    } 
+    else
+    {
+    // yes, cookie was already present 
+        console.log('cookie exists', typeof cookie);
+    } 
+        next();
+    if (SuivantOrPrec(req)==="suiv"){  
+        var cookiedate = req.cookies.date; //
+        var pDate = new Date(cookiedate); 
+        //console.log(d+"+++++++++++++++++++++++++++++")
+        var d = pDate.setDate(pDate.getDate() +1);
+        var DateCookie = pDate.toISOString().slice(0,10);
+        res.cookie('date',DateCookie, { maxAge: 900000, httpOnly: true })
+        console.log("+++++++++++++++++++++++++++++suivant++++++++++++++++++++++++++++++++++++"+pDate); 
+ 
+    }
+    if (SuivantOrPrec(req)==="prec"){
+        var cookiedate = req.cookies.date; //
+        var pDate = new Date(cookiedate); 
+        //console.log(d+"+++++++++++++++++++++++++++++")
+        var d = pDate.setDate(pDate.getDate() - 1);
+        var DateCookie = pDate.toISOString().slice(0,10);
+        res.cookie('date',DateCookie, { maxAge: 900000, httpOnly: true })
+        console.log("+++++++++++++++++++++++++++++precedent++++++++++++++++++++++++++++++++++++");
+    }
+    if (SuivantOrPrec(req)==="undefined"){
+        var pDate = req.cookies.date +1;
+        console.log("+++++++++++++++++++++++++++++undefined++++++++++++++++++++++++++++++++++++"); 
+
+    }
+    
     var SerialPort = require('serialport');
     var Readline = SerialPort.parsers.readline;
     var Readable = require('stream').Readable;
@@ -79,14 +122,14 @@ router.get('/', function (req,res,next) {
     var portName = '/dev/ttyACM0';
     var sp = new SerialPort(portName, {
         baudRate: 115200,
-        parser : Readline
+        parser : Readline 
     });
 
     var pars = sp.pipe(new Delimiter({ delimiter: '\n'}));
     pars.on('data',function(input) {
         var values = input.toString("utf-8").slice(0, -1).split(":");
-        console.log(values[0]);
-        console.log(values[1]);
+        //console.log(values[0]);
+        //console.log(values[1]);
 
     heart_beat_values.push(values[0]);
     temperature_values.push(values[1]);
@@ -94,17 +137,16 @@ router.get('/', function (req,res,next) {
 
 
     heart_beat_values._read = function noop() {};
-    temperature_values._read = function noop() {};
-    var pDate = new Date();  
-    pDate.setDate(pDate.getDate());
+    temperature_values._read = function noop() {};  
+     //pDate.setDate(pDate.getDate());
  
    averageHeartBeatByhour(pDate,function(tab){
        tabHeart = tab;
-       console.log("-->"+tabHeart.join(','));
+       //console.log("-->"+tabHeart.join(','));
     });
     averageTempByhour(pDate,function(tab){
        tabTemp = tab;
-       console.log("temperature"+tabTemp);
+       //console.log("temperature"+tabTemp);
     });
 
     io.on('connection', function (socket) {
@@ -114,7 +156,7 @@ router.get('/', function (req,res,next) {
                 value : parseFloat(inp.toString("utf-8")),
                 date: Date.now(),
                 time: new Date(),
-                hour: new Date().getHours()+2
+                hour: new Date().getHours() -5
             });
             heart_beat.save().then(() =>{
                 console.log("----------------------- Persist heart beat");
@@ -134,16 +176,16 @@ router.get('/', function (req,res,next) {
                     value : parseFloat(inp.toString("utf-8")),
                     date: Date.now(),
                     time: new Date(),
-                    hour: new Date().getHours()+2
+                    hour: new Date().getHours() - 5 
                 });
                 Temps.save().then(() =>{
-                    console.log("----------------------- Persist Temp");
+                     console.log("----------------------- Persist Temp");
                 })
             }
         });
     });
-
-
+    console.log("-----------------------"+tabTemp.join(','));
+    
     
     res.render('home', {title : 'arduino page', varHeart : tabHeart.join(','),
          varTemp: tabTemp.join(','), varDate : pDate});
@@ -167,7 +209,7 @@ function averageHeartBeatByhour(day,callback){
                     date: day
                 }
             }).then(sum => {
-                console.log("+++++" + sum / data.count);
+                //console.log("+++++" + sum / data.count);
             for(var i = 0; i < 24; i++){
                data.rows.forEach((elem) => {
                    if(i == elem.hour){
@@ -209,7 +251,7 @@ function averageTempByhour(day,callback){
                 date: day
             }
         }).then(sum => {
-            console.log("T+++++" + sum / data.count);
+            //console.log("T+++++" + sum / data.count);
         for(var i = 0; i < 24; i++){
            data.rows.forEach((elem) => {
                if(i == elem.hour){
@@ -232,5 +274,13 @@ function averageTempByhour(day,callback){
    
 }
 
+function SuivantOrPrec(req){
+    if (req.query["suiv"])
+        return "suiv";
+    else if (req.query["prec"])
+        return "prec";
+    else 
+        return "undefined";
+}
 
 module.exports = router;
