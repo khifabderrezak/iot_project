@@ -10,7 +10,7 @@ Realisé par :
 - Seddik KADI
 
 Objectif du projet :
-Dans le cadre de ce projet, nous avons réalisé une application IOT déstinée à mesurer les constantes vitales du corps humain, 
+Nous avons réalisé une application IOT déstinée à mesurer les constantes vitales du corps humain, 
 à savoir, la fréquence cardiaque et la température corporelle. 
 
 Technologies utilisées :
