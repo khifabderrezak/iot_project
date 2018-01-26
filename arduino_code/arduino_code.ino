@@ -5,7 +5,7 @@
 #define ONE_WIRE_BUS 10
 
 
-
+// Initialize values 
 int sensor_pin = 0;                
 int led_pin = 13;                  
 
@@ -43,6 +43,7 @@ DallasTemperature sensors(&oneWire);
 void setup()
 
 {
+	// Setup Method 
 
   pinMode(led_pin,OUTPUT);        
 
@@ -57,7 +58,7 @@ void setup()
 void loop()
 
 { 
-
+	// Loop Method
       //Serial.print("BPM: ");
       Serial.print(heart_rate);
       Serial.print(":");
@@ -98,7 +99,9 @@ ISR(TIMER2_COMPA_vect)
 
   analog_data = analogRead(sensor_pin);            
 
-  samplecounter += 2;                        
+  samplecounter += 2;  
+
+
 
   int N = samplecounter - lastBeatTime;      
 
@@ -117,7 +120,7 @@ ISR(TIMER2_COMPA_vect)
 
     }
 
-
+    // test analog data 
   if(analog_data > thresh && analog_data > peak_value)
 
     {        
@@ -127,7 +130,7 @@ ISR(TIMER2_COMPA_vect)
     }                          
 
 
-
+    // test N Values 
    if (N > 250)
 
   {                            
@@ -145,7 +148,7 @@ ISR(TIMER2_COMPA_vect)
         lastBeatTime = samplecounter;     
 
 
-
+       // Detect Hearbeat 
        if(second_heartpulse)
 
         {                        
@@ -156,7 +159,9 @@ ISR(TIMER2_COMPA_vect)
 
           {            
 
-            beat[i] = time_between_beats; //Filling the array with the heart beat values                    
+          	//Filling the array with the heart beat values
+
+            beat[i] = time_between_beats;                     
 
           }
 
@@ -181,6 +186,7 @@ ISR(TIMER2_COMPA_vect)
       word runningTotal = 0;  
 
 
+      // Sum of all hearbeat values 
       for(int i=0; i<=8; i++)
 
         {               
@@ -191,6 +197,8 @@ ISR(TIMER2_COMPA_vect)
 
         }
 
+
+      // set time between two heartbeat values 
 
       beat[9] = time_between_beats;             
 
@@ -206,11 +214,12 @@ ISR(TIMER2_COMPA_vect)
 
 
 
-
+  // test analog data 
   if (analog_data < thresh && pulse_signal == true)
 
     {  
-
+	
+	// assign values 
       digitalWrite(led_pin,LOW); 
 
       pulse_signal = false;             
@@ -225,11 +234,12 @@ ISR(TIMER2_COMPA_vect)
 
     }
 
-
+  // test N 
   if (N > 2500)
 
     {                          
-
+	
+	// Assign Values 
       thresh = 512;                     
 
       peak_value = 512;                 
